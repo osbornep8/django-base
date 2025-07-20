@@ -1,5 +1,9 @@
 """
+<<<<<<< HEAD
 ASGI config for medai project.
+=======
+ASGI config for movies project.
+>>>>>>> fbda72df505c152eba1f074ba8edb5a57de0b6d0
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

@@ -1,5 +1,9 @@
 """
+<<<<<<< HEAD
 WSGI config for medai project.
+=======
+WSGI config for movies project.
+>>>>>>> fbda72df505c152eba1f074ba8edb5a57de0b6d0
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
