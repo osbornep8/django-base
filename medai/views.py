@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 
 # procees JSON variables with leading underscores within the view itself and store it to be called elsewhere
-metadata_1 = { "metadata_1":{
+metadata = { "metadata_1":{
   "_id": {
     "$oid": "67c95e5c5cfd98ba96e179cb"
   },
@@ -14,7 +14,7 @@ metadata_1 = { "metadata_1":{
 }}
 
 def metadata(request):
-    return render(request, "metadata/metadata.html", metadata_1)
+    return render(request, "metadata/metadata.html", metadata)
 
 def project_info(request):
     return HttpResponse("ADNI Project")

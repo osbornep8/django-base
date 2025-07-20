@@ -17,16 +17,10 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-<<<<<<< HEAD
 from medai import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("metadata/", views.metadata),
     path("projectInfo/", views.project_info)
-=======
-
-urlpatterns = [
-    path("admin/", admin.site.urls),
->>>>>>> fbda72df505c152eba1f074ba8edb5a57de0b6d0
 ]
