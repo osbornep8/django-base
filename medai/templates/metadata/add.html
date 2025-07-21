@@ -1,0 +1,31 @@
+<form action="/metadata/add" method="POST">
+  {% csrf_token %}
+  <label><b>Enter Metadata</b></label
+  ><br />
+  <br />
+  <input
+    type="text"
+    name="subject_id"
+    id="subject_id"
+    placeholder="subject_id"
+  /><br /><br />
+  <input
+    type="text"
+    name="study_uid"
+    id="study_uid"
+    placeholder="study_id"
+  /><br /><br />
+  <input
+    type="text"
+    name="series_uid"
+    id="series_uid"
+    placeholder="series_uid"
+  /><br /><br />
+  <input
+    type="text"
+    name="image_uid"
+    id="image_uid"
+    placeholder="image_uid"
+  /><br /><br />
+  <input type="submit" value="Add" />
+</form>

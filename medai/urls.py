@@ -22,5 +22,8 @@ from medai import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("metadata/", views.metadata),
-    path("projectInfo/", views.project_info)
+    path("projectInfo/", views.project_info),
+    path("metadata/<int:id>", views.detail),
+    path("metadata/add", views.add),
+    path("metadata/delete/<int:id>", views.delete)
 ]

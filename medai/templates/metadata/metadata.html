@@ -6,10 +6,12 @@
   </head>
   <body>
     <h1>Metadata: Subject ID</h1>
-    {%for data in metadata%}
+
     <ul>
-      <li>{{data.subject_id}}</li>
+      {%for data in metadata%}
+      <li><a href="{{data.id}}">Image UID: {{data.image_uid}}</a></li>
+      {% endfor %}
     </ul>
-    {% endfor %}
+    <a href="/metadata/add">Add Patient Metadata</a>
   </body>
 </html>
