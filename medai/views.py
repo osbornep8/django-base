@@ -1,6 +1,7 @@
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
 from django.shortcuts import render
-from .models import Metadata
+from .serializers import MetadataSerializer, SubjectSerializer
+from .models import Metadata, Subject
 
 
 # procees JSON variables with leading underscores within the view itself and store it to be called elsewhere
@@ -28,7 +29,15 @@ data = {
 
 def metadata(request):
     data = Metadata.objects.all()
-    return render(request, "metadata/metadata.html", {"metadata": data})
+    metadata_serializer = MetadataSerializer(data, many=True)
+    return render(request, "metadata/metadata.html", {"metadata": metadata_serializer.data})
+    # This just gives the JSON response and if you add `{"metadata": metadata_serializer.data}` in the JSONResponse() it returns it as an object which is what I assume happens a
+    # return JsonResponse(metadata_serializer.data, safe=False)
+
+def subject_info(request):
+    data = Subject.objects.all()
+    sub_serializer = SubjectSerializer(data, many=True)
+    return JsonResponse(sub_serializer.data, safe=False)
 
 def project_info(request):
     return HttpResponse("ADNI Project")
@@ -56,3 +65,6 @@ def delete(request, id):
       raise Http404("Movie Does Not Exist!")
   metadata.delete()
   return HttpResponseRedirect("/metadata")
+
+def home(request):
+    return render(request, "homepage/home.html")
