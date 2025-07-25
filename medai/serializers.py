@@ -6,6 +6,11 @@ class MetadataSerializer(serializers.ModelSerializer):
         model = Metadata
         fields = ['id', 'subject_id', 'study_uid', 'series_uid', 'image_uid']
 
+class SubjectIDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subject
+        fields= ['id', 'subject_id']
+
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject

@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
 from django.shortcuts import render
-from .serializers import MetadataSerializer, SubjectSerializer
+from .serializers import MetadataSerializer, SubjectSerializer, SubjectIDSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -37,6 +37,7 @@ data = {
 }
 ]}
 
+# @api_view('GET')
 def metadata(request):
 
     # if request.methods == GET:
@@ -51,22 +52,42 @@ def metadata(request):
 @api_view(http_method_names=['GET', 'POST'])
 def subject_info(request):
 
-    if request.method == 'GET':
-        data = Subject.objects.all()
-        sub_serializer = SubjectSerializer(data, many=True)
-        return JsonResponse(sub_serializer.data, safe=False)
+    # if request.method == 'GET':
+    #     data = Subject.objects.all()
+    #     sub_serializer = SubjectSerializer(data, many=True)
+    #     return JsonResponse(sub_serializer.data, safe=False)
+
+    if request.method == "GET":
+        subject_id = Subject.objects.all()
+        serializer = SubjectIDSerializer(subject_id, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     if request.method == 'POST':
-        sub_serializer = SubjectSerializer(request.data)
-        if sub_serializer.is_valid(): sub_serializer.save()
-        return Response(sub_serializer.data, status=status.HTTP_201_CREATED)
+        serializer = SubjectSerializer(data=request.data)
+        if serializer.is_valid(): serializer.save()
+        # This is the preferred way than JsonResponse as it is part of the rest_framework
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def project_info(request):
     return HttpResponse("ADNI Project")
 
-def detail(request, id):
+
+def meta_detail(request, id):
     data = Metadata.objects.get(pk=id)
     return render(request, "metadata/detail.html", {"patient": data})
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def subject_detail(request, id):
+
+    try:
+        subject = Subject.objects.get(pk=id)
+    except Subject.DoesNotExist:
+        return Response(status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = SubjectSerializer(subject)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 def add(request):
     subject_id = request.POST.get("subject_id")

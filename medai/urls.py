@@ -23,9 +23,10 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("home/", views.home),
     path("metadata/", views.metadata),
-    path('subectinfo/', views.subject_info),
+    path('subjectinfo/', views.subject_info),
+    path("subjectinfo/<int:id>", views.subject_detail),
     path("projectInfo/", views.project_info),
-    path("metadata/<int:id>", views.detail),
+    path("metadata/<int:id>", views.meta_detail),
     path("metadata/add", views.add),
     path("metadata/delete/<int:id>", views.delete)
 ]
