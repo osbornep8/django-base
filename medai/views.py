@@ -1,6 +1,9 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
 from django.shortcuts import render
 from .serializers import MetadataSerializer, SubjectSerializer
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 from .models import Metadata, Subject
 
 
@@ -25,19 +28,38 @@ data = {
   "series_uid": "S21853",
   "image_uid": "I28556",
 },
+{
+    "subject_id": "002_S_0295", 
+    "research_group": "CN",
+    "sex": "M",
+    "apoe": {"APOE_A1": 3, "APOE_A2": 4},
+    "visit_identifier": "ADNI1/GO Month 6"
+}
 ]}
 
 def metadata(request):
+
+    # if request.methods == GET:
     data = Metadata.objects.all()
     metadata_serializer = MetadataSerializer(data, many=True)
     return render(request, "metadata/metadata.html", {"metadata": metadata_serializer.data})
-    # This just gives the JSON response and if you add `{"metadata": metadata_serializer.data}` in the JSONResponse() it returns it as an object which is what I assume happens a
-    # return JsonResponse(metadata_serializer.data, safe=False)
+    
+        # This just gives the JSON response and if you add `{"metadata": metadata_serializer.data}` in the JSONResponse() it returns it as an object which is what I assume happens a
+        # return JsonResponse(metadata_serializer.data, safe=False)
+    
 
+@api_view(http_method_names=['GET', 'POST'])
 def subject_info(request):
-    data = Subject.objects.all()
-    sub_serializer = SubjectSerializer(data, many=True)
-    return JsonResponse(sub_serializer.data, safe=False)
+
+    if request.method == 'GET':
+        data = Subject.objects.all()
+        sub_serializer = SubjectSerializer(data, many=True)
+        return JsonResponse(sub_serializer.data, safe=False)
+    
+    if request.method == 'POST':
+        sub_serializer = SubjectSerializer(request.data)
+        if sub_serializer.is_valid(): sub_serializer.save()
+        return Response(sub_serializer.data, status=status.HTTP_201_CREATED)
 
 def project_info(request):
     return HttpResponse("ADNI Project")
