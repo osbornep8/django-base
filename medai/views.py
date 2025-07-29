@@ -8,37 +8,10 @@ from .models import Metadata, Subject
 
 
 # procees JSON variables with leading underscores within the view itself and store it to be called elsewhere
-data = { 
-    "metadata":[
-        {
-  "subject_id": "002_S_0295",
-  "study_uid": "3566",
-  "series_uid": "S13402",
-  "image_uid": "I13712",
-}, 
-{
-  "subject_id": "002_S_0295",
-  "study_uid": "3566",
-  "series_uid": "S13402",
-  "image_uid": "I13713",
-},
-{
-  "subject_id": "002_S_0295",
-  "study_uid": "5726",
-  "series_uid": "S21853",
-  "image_uid": "I28556",
-},
-{
-    "subject_id": "002_S_0295", 
-    "research_group": "CN",
-    "sex": "M",
-    "apoe": {"APOE_A1": 3, "APOE_A2": 4},
-    "visit_identifier": "ADNI1/GO Month 6"
-}
-]}
+
 
 # @api_view('GET')
-def metadata(request):
+def metadata(request, format=None):
 
     # if request.methods == GET:
     data = Metadata.objects.all()
@@ -50,7 +23,7 @@ def metadata(request):
     
 
 @api_view(http_method_names=['GET', 'POST'])
-def subject_info(request):
+def subject_info(request, format=None):
 
     # if request.method == 'GET':
     #     data = Subject.objects.all()
@@ -63,13 +36,14 @@ def subject_info(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     if request.method == 'POST':
+        # Here we are getting the serializer to prepare the data to send to the respective subject db
         serializer = SubjectSerializer(data=request.data)
         if serializer.is_valid(): serializer.save()
         # This is the preferred way than JsonResponse as it is part of the rest_framework
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def project_info(request):
+def project_info(request, format=None):
     return HttpResponse("ADNI Project")
 
 
@@ -78,7 +52,7 @@ def meta_detail(request, id):
     return render(request, "metadata/detail.html", {"patient": data})
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def subject_detail(request, id):
+def subject_detail(request, id, format=None):
 
     try:
         subject = Subject.objects.get(pk=id)
@@ -88,6 +62,16 @@ def subject_detail(request, id):
     if request.method == 'GET':
         serializer = SubjectSerializer(subject)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    elif request.method == 'PUT':
+        serializer = SubjectSerializer(subject, data=request.data)
+        if serializer.is_valid(): 
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        subject.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 def add(request):
     subject_id = request.POST.get("subject_id")

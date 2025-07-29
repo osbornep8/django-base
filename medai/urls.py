@@ -18,6 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from medai import views
+from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -30,3 +31,5 @@ urlpatterns = [
     path("metadata/add", views.add),
     path("metadata/delete/<int:id>", views.delete)
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
