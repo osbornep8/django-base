@@ -10,10 +10,10 @@ from .models import Metadata, Subject
 # procees JSON variables with leading underscores within the view itself and store it to be called elsewhere
 
 
-# @api_view('GET')
+# @api_view(['GET'])
 def metadata(request, format=None):
 
-    # if request.methods == GET:
+    # if request.method == "GET":
     data = Metadata.objects.all()
     metadata_serializer = MetadataSerializer(data, many=True)
     return render(request, "metadata/metadata.html", {"metadata": metadata_serializer.data})
