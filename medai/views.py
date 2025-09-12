@@ -44,7 +44,7 @@ def subject_info(request, format=None):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def project_info(request, format=None):
-    return HttpResponse("ADNI Project")
+    return HttpResponse("ADNI Project Info")
 
 
 def meta_detail(request, id):
